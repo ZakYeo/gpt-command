@@ -18,11 +18,11 @@ Ensure you have an OpenAI API key set up in your environment to use their servic
 ## Installation
 Clone this repository to your local machine using:
 
-```git clone <repository-url>```
+```git clone https://github.com/ZakYeo/gpt-command.git```
 
 Navigate to the project directory:
 
-```cd <project-directory-name>```
+```cd gpt-command```
 
 Install the required Python packages:
 
