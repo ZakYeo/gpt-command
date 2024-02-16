@@ -15,7 +15,7 @@ def translate_command(command, os_name):
         "Windows": "Windows"
     }.get(os_name, "generic")
 
-    system_context = f"You are now a translator. You translate the input into its {os_context} compatible command."
+    system_context = f"Translate the following command into its {os_context} compatible equivalent. Provide only the translated command as a response."
 
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -24,6 +24,7 @@ def translate_command(command, os_name):
             {"role": "user", "content": command}
         ]
     )
+
     return completion.choices[0].message.content
 
 if __name__ == "__main__":
