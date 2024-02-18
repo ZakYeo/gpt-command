@@ -77,6 +77,6 @@ To facilitate running `gpt.py` on Windows from any directory, a PowerShell scrip
 
 If you encounter restrictions due to execution policies, you can temporarily bypass the policy for running this script with:
 
-`powershell -ExecutionPolicy Bypass -File .\Add-GptPath.ps1`
+`powershell -ExecutionPolicy Bypass -File .\add_to_path.ps1`
 
 After running the script, you may need to restart PowerShell or your computer for the changes to take effect. Now, you can simply type `gpt <command>` from any directory in your Command Prompt or PowerShell to run `gpt.py`.
