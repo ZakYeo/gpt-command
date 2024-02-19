@@ -3,7 +3,7 @@
 import sys
 import platform
 from openai import OpenAI
-import requests
+
 
 client = OpenAI()
 
