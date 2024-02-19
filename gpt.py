@@ -3,8 +3,9 @@
 import sys
 import platform
 from openai import OpenAI
+import os
 
-
+model = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
 client = OpenAI()
 
 
@@ -32,7 +33,7 @@ def translate_command(command, os_name):
     system_context = f"Translate the following command into its {os_context} compatible equivalent. Provide only the translated command as a response."
 
     completion = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model=model,
         messages=[
             {"role": "system", "content": system_context},
             {"role": "user", "content": command}
