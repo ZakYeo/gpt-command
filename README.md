@@ -80,3 +80,39 @@ If you encounter restrictions due to execution policies, you can temporarily byp
 `powershell -ExecutionPolicy Bypass -File .\add_to_path.ps1`
 
 After running the script, you may need to restart PowerShell or your computer for the changes to take effect. Now, you can simply type `gpt <command>` from any directory in your Command Prompt or PowerShell to run `gpt.py`.
+
+## Changing the Model
+
+The default model is set to "gpt-3.5-turbo". If you wish to use a different model, you can easily change the model by setting the `OPENAI_MODEL` environment variable. This allows you to customize the behavior of the script by using a different version of the GPT model according to your needs.
+
+### How to Change the Model
+
+1. **On MacOS and Linux:**
+   - Open your Terminal.
+   - Use the `export` command to set the `OPENAI_MODEL` environment variable to your desired model. For example, to use "gpt-4", you would run:
+
+     ```export OPENAI_MODEL=gpt-4```
+
+   - This change will only apply to the current Terminal session. To make it permanent, add the export command to your `~/.bashrc`, `~/.zshrc`, or equivalent configuration file.
+
+2. **On Windows:**
+   - Open PowerShell or Command Prompt.
+   - Use the `setx` command to permanently set the environment variable. For example, to change the model to "gpt-4", you would run:
+
+     ```setx OPENAI_MODEL "gpt-4"```
+
+   - Please note that you need to restart your command line interface or your computer for the changes to take effect.
+
+### Verifying the Change
+
+To verify that the model has been changed successfully, you can echo the `OPENAI_MODEL` environment variable:
+
+- On MacOS and Linux, in the Terminal:
+
+  ```echo $OPENAI_MODEL```
+
+- On Windows, in PowerShell or Command Prompt:
+
+  ```echo %OPENAI_MODEL%```
+
+If the output matches the model you have set, then the change has been applied successfully.
