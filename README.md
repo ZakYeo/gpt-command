@@ -2,11 +2,12 @@
 
 ## Overview
 
-This project leverages the OpenAI API to translate user input into commands compatible with the operating system the script is run on. As a bonus, you can add this program as a command straight into your Terminal for easy use (See "Setting Up PATH for Easy Access" section).
+This project leverages the OpenAI API to allow the use of chatGPT API in Python. The intention is for you to add this program as a command directly into your Terminal for easy use (See "Setting Up PATH for Easy Access" section).
 
 ## Features
 
 - Auto-detects the operating system (Windows, MacOS, Linux).
+- Query chatGPT
 - Translates input commands to the detected operating system's command syntax.
 - Utilizes OpenAI's GPT models for accurate command translation.
 
@@ -14,9 +15,35 @@ This project leverages the OpenAI API to translate user input into commands comp
 
 - Python 3
 - OpenAI Python Package
-- Requests Package
 
 Ensure you have an OpenAI API key set up in your environment to use their services.
+
+## Usage
+
+To use the script, open your Terminal and navigate to the directory where the script is saved. Then, execute the script with your command as an argument. There are two ways to use the script:
+
+1. To translate a command without specifying a system context:
+
+   `python gpt.py <text>`
+
+   Will query chatGPT with the `<text>` you specify.
+
+2. To translate a command with a system context:
+
+   `python gpt.py cmd <command>`
+
+   This includes the system context in the translation. Meaning it will take your input command, and translate it into your operating system's Terminal-equivalent command.
+
+Replace `<command>` with the command you wish to translate. For example, to translate "list all files" into a command compatible with your operating system, you would use either:
+
+`python gpt.py "list all files"`
+
+or
+
+`python gpt.py cmd "list all files"`
+
+for a system-specific translation. The script will output the translated command based on the operating system it detects or the specified context.
+
 
 ## Installation
 
@@ -32,17 +59,6 @@ Install the required Python packages:
 
 `pip install openai requests`
 
-## Usage
-
-To use the script, open your Terminal and navigate to the directory where the script is saved. Then, execute the script with your command as an argument. The syntax is as follows:
-
-`python gpt.py <command>`
-
-Replace `<command>` with the command you wish to translate. For example, if you want to translate "list all files" into a command compatible with your operating system, you would use:
-
-`python gpt.py "list all files"`
-
-The script will output the translated command based on the operating system it detects.
 
 ## Setting Up PATH for Easy Access
 
