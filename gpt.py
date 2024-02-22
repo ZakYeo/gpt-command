@@ -9,17 +9,16 @@ model = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
 client = OpenAI()
 
 
-def translate_command(command, os_name):
+def query_gpt(content, os_name, use_system_context):
     """
-    A script that translates shell commands into their equivalents for different operating systems.
+    The script can be used in two ways:
+        1. Without specifying a system context, which translates the given content without adding any specific system context to the translation process. Useful for general content translations.
+            Usage: python gpt.py <content>
+            Example: python gpt.py "list all files"
 
-    This script uses OpenAI's GPT model to translate given shell commands into their equivalent forms for MacOS, Linux, or Windows operating systems. It determines the target operating system based on the execution environment and expects the input command as a command-line argument. The script normalizes the operating system name to one of the common operating systems (MacOS, Linux, Windows) or defaults to 'generic' if the OS is not recognized. It then constructs a prompt for the GPT model to generate the translated command specifically for the identified operating system.
-
-    Usage:
-        Run the script with the command to translate as an argument.
-        Example: `python3 script_name.py <command_to_translate>`
-
-        The script outputs the translated command to the standard output.
+        2. With a system context, which includes the system context in the translation, making the content translation specific to the operating system the script is run on. Use this option when you need the translated content to be specifically tailored for MacOS, Linux, or Windows.
+            Usage: python gpt.py cmd <content>
+            Example: python gpt.py cmd "list all files"
 
     Note:
         - The script requires an OpenAI API key to be configured in the environment or through the OpenAI client library's configuration.
@@ -30,13 +29,16 @@ def translate_command(command, os_name):
         "Windows": "Windows"
     }.get(os_name, "generic")
 
-    system_context = f"Translate the following command into its {os_context} compatible equivalent. Provide only the translated command as a response."
+    if use_system_context:
+        system_context = f"Translate the following content into its {os_context} compatible equivalent. Provide only the translated content as a response."
+    else:
+        system_context = ""
 
     completion = client.chat.completions.create(
         model=model,
         messages=[
             {"role": "system", "content": system_context},
-            {"role": "user", "content": command}
+            {"role": "user", "content": content}
         ]
     )
 
@@ -45,9 +47,17 @@ def translate_command(command, os_name):
 
 if __name__ == "__main__":
     os_name = platform.system()
-    if len(sys.argv) < 2:
-        print("Usage: gpt <command>")
+    use_system_context = False
+
+    # Check for 'cmd' argument to determine if system context should be used
+    if len(sys.argv) >= 3 and sys.argv[1] == "cmd":
+        content = " ".join(sys.argv[2:])
+        use_system_context = True
+    elif len(sys.argv) >= 2:
+        content = " ".join(sys.argv[1:])
     else:
-        command = " ".join(sys.argv[1:])
-        translated_command = translate_command(command, os_name)
-        print(translated_command)
+        print("Usage: gpt.py <content> OR gpt.py cmd <content> for system context")
+        sys.exit(1)
+
+    translated_content = query_gpt(content, os_name, use_system_context)
+    print(translated_content)
