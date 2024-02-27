@@ -8,8 +8,8 @@ This project leverages the OpenAI API to allow the use of chatGPT API in Python.
 
 - Auto-detects the operating system (Windows, MacOS, Linux).
 - Query chatGPT
-- Translates input commands to the detected operating system's command syntax.
-- Utilizes OpenAI's GPT models for accurate command translation.
+- Use the cmd command to translate input commands to the detected operating system's command syntax.
+- Create custom commands in a JSON file to give chatGPT context for specific commands.
 
 ## Requirements
 
@@ -44,6 +44,21 @@ or
 
 for a system-specific translation. The script will output the translated command based on the operating system it detects or the specified context.
 
+## Custom Commands
+
+You can edit the JSON file `custom_commands.json` in the same directory as the script to specify the system context for specific commands. The file should contain key-value pairs of the form `<system>` : `<command>`. For example:
+
+```json
+{
+    "help": "reply only with the word tomato"
+}
+```
+
+Now, you can do something like this:
+
+`python gpt.py help whats your name`
+Or,
+`gpt help whats your name` (See "Setting Up PATH for Easy Access" section)
 
 ## Installation
 
