@@ -4,35 +4,17 @@ import sys
 import platform
 from openai import OpenAI
 import os
-
+import json
 model = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
 client = OpenAI()
 
 
-def query_gpt(content, os_name, use_system_context):
+def query_gpt(content, system_context=""):
     """
-    The script can be used in two ways:
-        1. Without specifying a system context, which translates the given content without adding any specific system context to the translation process. Useful for general content translations.
-            Usage: python gpt.py <content>
-            Example: python gpt.py "list all files"
-
-        2. With a system context, which includes the system context in the translation, making the content translation specific to the operating system the script is run on. Use this option when you need the translated content to be specifically tailored for MacOS, Linux, or Windows.
-            Usage: python gpt.py cmd <content>
-            Example: python gpt.py cmd "list all files"
-
-    Note:
-        - The script requires an OpenAI API key to be configured in the environment or through the OpenAI client library's configuration.
+    Query chatGPT with the given content and system context.
     """
-    os_context = {
-        "Darwin": "MacOS",
-        "Linux": "Linux",
-        "Windows": "Windows"
-    }.get(os_name, "generic")
-
-    if use_system_context:
-        system_context = f"Translate the following content into its {os_context} compatible equivalent. Provide only the translated content as a response."
-    else:
-        system_context = ""
+    if system_context:
+        system_context = f"Translate the following content into its {system_context} compatible equivalent. Provide only the translated content as a response."
 
     completion = client.chat.completions.create(
         model=model,
@@ -44,20 +26,54 @@ def query_gpt(content, os_name, use_system_context):
 
     return completion.choices[0].message.content
 
-
-if __name__ == "__main__":
-    os_name = platform.system()
-    use_system_context = False
-
-    # Check for 'cmd' argument to determine if system context should be used
-    if len(sys.argv) >= 3 and sys.argv[1] == "cmd":
-        content = " ".join(sys.argv[2:])
-        use_system_context = True
-    elif len(sys.argv) >= 2:
-        content = " ".join(sys.argv[1:])
-    else:
-        print("Usage: gpt.py <content> OR gpt.py cmd <content> for system context")
+def load_custom_commands(json_file):
+    """
+    Loads custom commands from a JSON file.
+    """
+    try:
+        with open(json_file, 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        print(f"Custom commands file {json_file} not found. Using default settings.")
+        return {}
+    except json.JSONDecodeError:
+        print("Error decoding JSON. Please check the syntax of your commands file.")
         sys.exit(1)
 
-    translated_content = query_gpt(content, os_name, use_system_context)
+def get_system_context(os_name):
+    """
+    Returns the system context for the given operating system.
+    """
+    return {
+        "Darwin": "MacOS",
+        "Linux": "Linux",
+        "Windows": "Windows"
+    }.get(os_name, "generic")
+
+if __name__ == "__main__":
+    custom_commands_file = 'custom_commands.json'
+    custom_commands = load_custom_commands(custom_commands_file)
+    os_name = platform.system()
+
+    if len(sys.argv) > 1:
+        # Determine if the first argument is a recognized command
+        command = sys.argv[1]
+        if command in custom_commands:
+            # Custom command found in JSON
+            content = " ".join(sys.argv[2:])
+            system_context = custom_commands[command]
+            translated_content = query_gpt(content, system_context)
+        elif command == "cmd":
+            # 'cmd' command processing with dynamic system context
+            content = " ".join(sys.argv[2:])
+            system_context = get_system_context(os_name)
+            translated_content = query_gpt(content, system_context)
+        else:
+            # No recognized command or 'cmd', treat the entire input as content
+            content = " ".join(sys.argv[1:])
+            translated_content = query_gpt(content)
+    else:
+        print("Usage: gpt.py <command> <content> OR gpt.py <content> for no specific context")
+        sys.exit(1)
+
     print(translated_content)
