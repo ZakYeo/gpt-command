@@ -15,7 +15,7 @@ This project leverages the OpenAI API to allow the use of chatGPT API in Python.
 - Python 3
 - OpenAI Python Package
 
-Ensure you have an OpenAI API key set up in your environment to use their services.
+Ensure you have an OpenAI API key set up in your environment to use their services. Please see the [OpenAI API Keys](https://platform.openai.com/account/api-keys) page to get an API key & read the [OpenAI API Key best practices](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety) for more information.
 
 ## Usage
 
