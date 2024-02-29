@@ -45,19 +45,39 @@ for a system-specific translation. The script will output the translated command
 
 ## Custom Commands
 
-You can edit the JSON file `custom_commands.json` in the same directory as the script to specify the system context for specific commands. The file should contain key-value pairs of the form `<system>` : `<command>`. For example:
+The chatGPT API supports the use of system context to provide additional information to the model. This can be useful for commands that require specific information or for commands that are not directly related to the user's input.
+
+You can edit the JSON file `custom_commands.json` in the same directory as the script to specify the system context for commands. The file should contain key-value pairs of the form `<command>` : `<system_context>`. For example:
 
 ```json
 {
-    "help": "reply only with the word tomato"
+    "python": "Reply with Python code"
 }
 ```
 
 Now, you can do something like this:
 
-`python gpt.py help whats your name`
+`python gpt.py python "Whats the best way to reverse a string"`
 Or,
-`gpt help whats your name` (See "Setting Up PATH for Easy Access" section)
+`gpt python "Whats the best way to reverse a string"` (See "Setting Up PATH for Easy Access" section)
+
+By doing this, chatGPT will take the context into consideration and reply in Python, without you explicitly stating that in your command. This feature can be very powerful for repeated use of chatGPT queries that require niche output.
+
+For example, somebody that wants easy explanations might create a custom command like:
+
+```json
+{
+    "explain": "Explain as if I'm a total beginner"
+}
+```
+
+Or, if you prefer a specific language output:
+
+```json
+{
+    "cn": "Reply in Chinese"
+}
+```
 
 ## Installation
 
@@ -85,11 +105,11 @@ This script automatically creates an alias gpt that points to your gpt.py script
 1. Open a Terminal and navigate to the directory where `gpt.py` is located.
 2. Ensure that `add_to_path.sh` is in the same directory as `gpt.py` and is executable. You can make it executable by running:
 
-   `chmod +x add_to_path.sh.sh`
+   `chmod +x add_to_path.sh`
 
 3. Run the setup script:
 
-   `./add_to_path.sh.sh`
+   `./add_to_path.sh`
 
 This script automatically adds the current directory (where `gpt.py` is located) to your `PATH` by appending a line to your `~/.zshrc` file. After running the script, please restart your Terminal or run `source ~/.zshrc` to apply the changes.
 
