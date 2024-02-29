@@ -34,7 +34,6 @@ def load_custom_commands(json_file):
         with open(json_file, 'r') as file:
             return json.load(file)
     except FileNotFoundError:
-        print(f"Custom commands file {json_file} not found. Using default settings.")
         return {}
     except json.JSONDecodeError:
         print("Error decoding JSON. Please check the syntax of your commands file.")
