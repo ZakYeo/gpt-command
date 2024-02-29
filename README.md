@@ -1,4 +1,4 @@
-# GPT Command Translator
+# GPT Command From The Terminal
 
 ## Overview
 
@@ -6,7 +6,6 @@ This project leverages the OpenAI API to allow the use of chatGPT API in Python.
 
 ## Features
 
-- Auto-detects the operating system (Windows, MacOS, Linux).
 - Query chatGPT
 - Use the cmd command to translate input commands to the detected operating system's command syntax.
 - Create custom commands in a JSON file to give chatGPT context for specific commands.
