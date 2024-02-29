@@ -58,7 +58,9 @@ You can edit the JSON file `custom_commands.json` in the same directory as the s
 Now, you can do something like this:
 
 `python gpt.py python "Whats the best way to reverse a string"`
+
 Or,
+
 `gpt python "Whats the best way to reverse a string"` (See "Setting Up PATH for Easy Access" section)
 
 By doing this, chatGPT will take the context into consideration and reply in Python, without you explicitly stating that in your command. This feature can be very powerful for repeated use of chatGPT queries that require niche output.
