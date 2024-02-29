@@ -6,6 +6,7 @@ from openai import OpenAI
 import os
 import json
 model = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
+should_load_custom_commands = os.getenv("LOAD_CUSTOM_COMMANDS", "true") == "true"
 client = OpenAI()
 
 
@@ -51,13 +52,16 @@ def get_system_context(os_name):
 
 if __name__ == "__main__":
     custom_commands_file = 'custom_commands.json'
-    custom_commands = load_custom_commands(custom_commands_file)
+    if should_load_custom_commands:
+        custom_commands = load_custom_commands(custom_commands_file)
+    else:
+        custom_commands = {}
     os_name = platform.system()
 
     if len(sys.argv) > 1:
         # Determine if the first argument is a recognized command
         command = sys.argv[1]
-        if command in custom_commands:
+        if custom_commands and command in custom_commands:
             # Custom command found in JSON
             content = " ".join(sys.argv[2:])
             system_context = custom_commands[command]
