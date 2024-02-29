@@ -147,3 +147,9 @@ To verify that the model has been changed successfully, you can echo the `OPENAI
   ```echo %OPENAI_MODEL%```
 
 If the output matches the model you have set, then the change has been applied successfully.
+
+## Remove loading of custom commands
+
+Each time the gpt program is executed, it attempts to read the custom commands file. This can create unwanted overhead for those that don't want to use the custom commands functionality. If you want to remove the loading of custom commands, you can set the `LOAD_CUSTOM_COMMANDS` environment variable to `false`. This will prevent the script from loading the custom commands file and using the default system context for commands or the built-in `cmd` command.
+
+See the section `How to change the model` for instructions, but use the environment variable `LOAD_CUSTOM_COMMANDS` and set it to `true` or `false`.
