@@ -19,33 +19,29 @@ Ensure you have an OpenAI API key set up in your environment to use their servic
 
 ## Usage
 
-To use the script, open your Terminal and navigate to the directory where the script is saved. Then, execute the script with your command as an argument. There are two ways to use the script:
+To use the script, open your Terminal and navigate to the directory where the script is saved. Then, execute the script with your command as an argument. There are three ways to use the script:
 
-1. To translate a command without specifying a system context:
+1. To query chatGPT directly:
 
-   `python gpt.py <text>`
+   `python gpt.py <query>`
 
-   Will query chatGPT with the `<text>` you specify.
+   Will query chatGPT with the `<query>` you specify.
 
-2. To translate a command with a system context:
+2. To query chatGPT using built-in command `cmd`:
 
-   `python gpt.py cmd <command>`
+   `python gpt.py cmd <query>`
 
    This includes the system context in the translation. Meaning it will take your input command, and translate it into your operating system's Terminal-equivalent command.
 
-Replace `<command>` with the command you wish to translate. For example, to translate "list all files" into a command compatible with your operating system, you would use either:
+3.  To query chatGPT using your own custom commands:
 
-`python gpt.py "list all files"`
+   `python gpt.py <command> <query>`
 
-or
-
-`python gpt.py cmd "list all files"`
-
-for a system-specific translation. The script will output the translated command based on the operating system it detects or the specified context.
+   Please see the section "Custom Commands" for more information.
 
 ## Custom Commands
 
-The chatGPT API supports the use of system context to provide additional information to the model. This can be useful for commands that require specific information or for commands that are not directly related to the user's input.
+The chatGPT API supports the use of system context to provide additional information to the model. This can be useful for queries that require specific information or for queries that are not directly related to the user's input.
 
 You can edit the JSON file `custom_commands.json` in the same directory as the script to specify the system context for commands. The file should contain key-value pairs of the form `<command>` : `<system_context>`. For example:
 
@@ -63,7 +59,7 @@ Or,
 
 `gpt python "Whats the best way to reverse a string"` (See "Setting Up PATH for Easy Access" section)
 
-By doing this, chatGPT will take the context into consideration and reply in Python, without you explicitly stating that in your command. This feature can be very powerful for repeated use of chatGPT queries that require niche output.
+By doing this, chatGPT will take the context into consideration and reply in Python, without you explicitly stating that in your query. This feature can be very powerful for repeated use of chatGPT queries that require niche output.
 
 For example, somebody that wants easy explanations might create a custom command like:
 
@@ -115,7 +111,7 @@ This script automatically creates an alias gpt that points to your gpt.py script
 
 This script automatically adds the current directory (where `gpt.py` is located) to your `PATH` by appending a line to your `~/.zshrc` file. After running the script, please restart your Terminal or run `source ~/.zshrc` to apply the changes.
 
-Now, you can simply type `gpt <command>` from any directory in your Terminal to run the script.
+Now, you can simply type `gpt <query>` from any directory in your Terminal to run the script.
 
 ### Setting Up on Windows
 
@@ -131,7 +127,7 @@ If you encounter restrictions due to execution policies, you can temporarily byp
 
 `powershell -ExecutionPolicy Bypass -File .\add_to_path.ps1`
 
-After running the script, you may need to restart PowerShell or your computer for the changes to take effect. Now, you can simply type `gpt <command>` from any directory in your Command Prompt or PowerShell to run `gpt.py`.
+After running the script, you may need to restart PowerShell or your computer for the changes to take effect. Now, you can simply type `gpt <query>` from any directory in your Command Prompt or PowerShell to run `gpt.py`.
 
 ## Changing the Model
 
