@@ -14,7 +14,7 @@ def query_gpt(content, system_context=""):
     Query chatGPT with the given content and system context.
     """
     if system_context:
-        system_context = f"Translate the following content into its {system_context} compatible equivalent. Provide only the translated content as a response."
+        system_context = f"Translate to {system_context} terminal command."
 
     completion = client.chat.completions.create(
         model=model,
