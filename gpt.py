@@ -15,16 +15,13 @@ cmd_system_context = "Translate to {} terminal command."
 client = OpenAI()
 
 
-def query_gpt(content, system_context=""):
+def query_gpt(messages):
     """
-    Query chatGPT with the given content and system context.
+    Query chatGPT with the given list of messages.
     """
     completion = client.chat.completions.create(
         model=model,
-        messages=[
-            {"role": "system", "content": system_context},
-            {"role": "user", "content": content}
-        ]
+        messages=messages
     )
 
     return completion.choices[0].message.content
@@ -52,29 +49,36 @@ def get_system_context(os_name):
         "Windows": "Windows"
     }.get(os_name, "generic")
 
+
 def continuous_shell(custom_commands, os_name):
     """
-    Enters a continuous shell for querying chatGPT.
+    Enters a continuous shell for querying chatGPT, remembering previous interactions.
     """
     print("""
         ChatGPT Continuous Shell
         Prefix with your custom command to use it.
         Type 'exit' or 'quit' to exit.
         """)
+    conversation_history = []
     while True:
         user_input = input(">>> ")
         if user_input.lower() in ['exit', 'quit']:
             print("Exiting continuous shell.")
             sys.exit(1)
+
+        message = {"role": "user", "content": user_input}
         if custom_commands and user_input in custom_commands:
             system_context = custom_commands[user_input]
-            translated_content = query_gpt(user_input, system_context)
+            conversation_history.append({"role": "system", "content": system_context})
         elif user_input == "cmd":
             system_context = get_system_context(os_name)
-            translated_content = query_gpt(user_input, system_context)
-        else:
-            translated_content = query_gpt(user_input)
-        print(translated_content)
+            conversation_history.append({"role": "system", "content": system_context})
+
+        conversation_history.append(message)
+
+        response_content = query_gpt(conversation_history)
+        print(response_content)
+        conversation_history.append({"role": "assistant", "content": response_content})
 
 def main():
     parser = argparse.ArgumentParser(description='Query GPT with custom or system commands.')
@@ -93,25 +97,26 @@ def main():
     if args.continuous:
         continuous_shell(custom_commands, os_name)
     elif args.command:
+        messages = []  # Construct the message list for a single interaction
         command = args.command
         content = " ".join(args.query)
+
         if custom_commands and command in custom_commands:
-            #  Execute custom command handler
+            # Execute custom command handler
             system_context = custom_commands[command]
-            translated_content = query_gpt(content, system_context)
+            messages.append({"role": "system", "content": system_context})
         elif command == "cmd":
-            # 'cmd' command processing with dynamic system context
-            os = get_system_context(os_name)
-            translated_content = query_gpt(content, cmd_system_context.format(os))
-        else:
-            # No recognized command, treat the entire input as content
-            content = f"{command} {content}"
-            translated_content = query_gpt(content)
+            # Execute built-in cmd command
+            system_context = get_system_context(os_name)
+            messages.append({"role": "system", "content": cmd_system_context.format(system_context)})
+
+        messages.append({"role": "user", "content": content if content else command})
+
+        translated_content = query_gpt(messages)
+        print(translated_content)
     else:
         print("Usage: Provide a command and/or content. Use --help for more information.")
         sys.exit(1)
-
-    print(translated_content)
 
 if __name__ == "__main__":
     main()
