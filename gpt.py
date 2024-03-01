@@ -64,7 +64,7 @@ def continuous_shell(custom_commands, os_name):
         user_input = input(">>> ")
         if user_input.lower() in ['exit', 'quit']:
             print("Exiting continuous shell.")
-            sys.exit(1)
+            sys.exit(0)
 
         message = {"role": "user", "content": user_input}
         command_parts = user_input.split(maxsplit=1)  # Split input into command and the rest
