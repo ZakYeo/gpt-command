@@ -72,9 +72,9 @@ def continuous_shell(custom_commands, os_name):
         if custom_commands and command in custom_commands:
             system_context = custom_commands[command]
             conversation_history.append({"role": "system", "content": system_context})
-        elif user_input == "cmd":
+        elif command == "cmd":
             system_context = get_system_context(os_name)
-            conversation_history.append({"role": "system", "content": system_context})
+            conversation_history.append({"role": "system", "content": cmd_system_context.format(system_context)})
 
         conversation_history.append(message)
 
