@@ -52,10 +52,35 @@ def get_system_context(os_name):
         "Windows": "Windows"
     }.get(os_name, "generic")
 
+def continuous_shell(custom_commands, os_name):
+    """
+    Enters a continuous shell for querying chatGPT.
+    """
+    print("""
+        ChatGPT Continuous Shell
+        Prefix with your custom command to use it.
+        Type 'exit' or 'quit' to exit.
+        """)
+    while True:
+        user_input = input(">>> ")
+        if user_input.lower() in ['exit', 'quit']:
+            print("Exiting continuous shell.")
+            sys.exit(1)
+        if custom_commands and user_input in custom_commands:
+            system_context = custom_commands[user_input]
+            translated_content = query_gpt(user_input, system_context)
+        elif user_input == "cmd":
+            system_context = get_system_context(os_name)
+            translated_content = query_gpt(user_input, system_context)
+        else:
+            translated_content = query_gpt(user_input)
+        print(translated_content)
+
 def main():
     parser = argparse.ArgumentParser(description='Query GPT with custom or system commands.')
     parser.add_argument('command', nargs='?', default='', help='The command or query to process.')
     parser.add_argument('query', nargs='*', help='Additional query.')
+    parser.add_argument('-c', '--continuous', action='store_true', help='Enter a continuous shell to query ChatGPT.')
     args = parser.parse_args()
 
 
@@ -65,7 +90,9 @@ def main():
         custom_commands = {}
     os_name = platform.system()
 
-    if args.command:
+    if args.continuous:
+        continuous_shell(custom_commands, os_name)
+    elif args.command:
         command = args.command
         content = " ".join(args.query)
         if custom_commands and command in custom_commands:

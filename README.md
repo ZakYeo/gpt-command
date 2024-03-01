@@ -11,6 +11,7 @@ This project leverages the OpenAI API to allow the use of chatGPT API in Python.
 - Use the cmd command to translate input commands to the detected operating system's command syntax.
 - Create custom commands in a JSON file to give chatGPT context for specific commands.
 - Help option via `--h` or `--help` flag
+- Continuous shell mode to query chatGPT in a loop using `-c` or `--continuous` flag
 
 ## Requirements
 
@@ -21,7 +22,7 @@ Ensure you have an OpenAI API key set up in your environment to use their servic
 
 ## Usage
 
-To use the script, open your Terminal and navigate to the directory where the script is saved. Then, execute the script with your command as an argument. There are three ways to use the script:
+To use the script, open your Terminal and navigate to the directory where the script is saved. Then, execute the script with your command as an argument. There are four ways to use the script:
 
 1. To query chatGPT directly:
 
@@ -35,11 +36,18 @@ To use the script, open your Terminal and navigate to the directory where the sc
 
    This includes the system context in the translation. Meaning it will take your input command, and translate it into your operating system's Terminal-equivalent command.
 
-3.  To query chatGPT using your own custom commands:
+3. To query chatGPT using your own custom commands:
 
    `python gpt.py <command> <query>`
 
    Please see the section "Custom Commands" for more information.
+
+4. To query chatGPT continuously, use the `-c` or `--continuous` flag:
+
+   `python gpt.py -c`
+
+   This will enter a continuous shell mode where you can query chatGPT in an endless shell. Custom commands also supported in this mode.
+
 
 ## Custom Commands
 
