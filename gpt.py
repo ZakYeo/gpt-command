@@ -6,9 +6,12 @@ from openai import OpenAI
 import os
 import json
 import argparse
+
 model = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
 should_load_custom_commands = os.getenv("LOAD_CUSTOM_COMMANDS", "true") == "true"
+
 custom_commands_file = 'custom_commands.json'
+cmd_system_context = "Translate to {} terminal command."
 client = OpenAI()
 
 
@@ -16,9 +19,6 @@ def query_gpt(content, system_context=""):
     """
     Query chatGPT with the given content and system context.
     """
-    if system_context:
-        system_context = f"Translate to {system_context} terminal command."
-
     completion = client.chat.completions.create(
         model=model,
         messages=[
@@ -101,8 +101,8 @@ def main():
             translated_content = query_gpt(content, system_context)
         elif command == "cmd":
             # 'cmd' command processing with dynamic system context
-            system_context = get_system_context(os_name)
-            translated_content = query_gpt(content, system_context)
+            os = get_system_context(os_name)
+            translated_content = query_gpt(content, cmd_system_context.format(os))
         else:
             # No recognized command, treat the entire input as content
             content = f"{command} {content}"
