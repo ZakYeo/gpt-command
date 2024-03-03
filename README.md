@@ -46,7 +46,7 @@ To use the script, open your Terminal and navigate to the directory where the sc
 
    `python gpt.py -c`
 
-   This will enter a continuous shell mode where you can query chatGPT in an endless shell. Custom commands also supported in this mode. In continuous mode, chatGPT will remember past queries in the current session.
+   This will enter a continuous shell mode where you can query chatGPT in an endless shell. Custom commands also supported in this mode. In continuous mode, chatGPT will remember past queries in the current session. Use `clear` or `cls` in this mode to clear conversation history.
 
 
 ## Custom Commands
