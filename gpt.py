@@ -108,6 +108,10 @@ def continuous_shell(custom_commands, os_name):
             system_context = get_system_context(os_name)
             conversation_history.append(
                 {"role": "system", "content": cmd_system_context.format(system_context)})
+        elif command == "clear" or command == "cls":
+            print("Conversation history cleared")
+            conversation_history = []
+            continue
 
         conversation_history.append(message)
 
